@@ -1,15 +1,16 @@
 package life.majiang.community.controller;
 
-import life.majiang.community.dto.AccessTokenDTO;
-import life.majiang.community.dto.GithubUser;
+import life.majiang.community.model.LoginUser;
 import life.majiang.community.model.User;
 import life.majiang.community.provider.GithubProvider;
+import life.majiang.community.service.LoginUserService;
 import life.majiang.community.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
@@ -38,33 +39,36 @@ public class AuthorizeController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private LoginUserService loginUserService;
 
-    @GetMapping("/callback")
-    public String callback(@RequestParam(name = "code") String code,
-                           @RequestParam(name = "state") String state,
+    @PostMapping("/callback")
+    public String callback(LoginUser login,
                            HttpServletResponse response) {
-        AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
-        accessTokenDTO.setClient_id(clientId);
-        accessTokenDTO.setClient_secret(clientSecret);
-        accessTokenDTO.setCode(code);
-        accessTokenDTO.setRedirect_uri(redirectUri);
-        accessTokenDTO.setState(state);
-        String accessToken = githubProvider.getAccessToken(accessTokenDTO);
-        GithubUser githubUser = githubProvider.getUser(accessToken);
-        if (githubUser != null && githubUser.getId() != null) {
+//        AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
+////        accessTokenDTO.setClient_id(clientId);
+////        accessTokenDTO.setClient_secret(clientSecret);
+////        accessTokenDTO.setCode(code);
+////        accessTokenDTO.setRedirect_uri(redirectUri);
+////        accessTokenDTO.setState(state);
+////        String accessToken = githubProvider.getAccessToken(accessTokenDTO);
+////        GithubUser githubUser = githubProvider.getUser(accessToken);
+
+        LoginUser loginUser = loginUserService.login(login);
+        if (loginUser != null && loginUser.getId() != null) {
             User user = new User();
             String token = UUID.randomUUID().toString();
             user.setToken(token);
-            user.setName(githubUser.getName());
-            user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setAvatarUrl(githubUser.getAvatarUrl());
+            user.setName(loginUser.getUsername());
+            user.setAccountId(String.valueOf(loginUser.getId()));
+            user.setAvatarUrl("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1580831055654&di=c32765d5387c858dbf581ee3888fc07e&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201804%2F18%2F20180418185826_skjbx.jpg");
             userService.createOrUpdate(user);
             Cookie cookie = new Cookie("token", token);
             cookie.setMaxAge(60 * 60 * 24 * 30 * 6);
             response.addCookie(cookie);
             return "redirect:/";
         } else {
-            log.error("callback get github error,{}", githubUser);
+            log.error("账号或者密码错误", loginUser);
             // 登录失败，重新登录
             return "redirect:/";
         }
