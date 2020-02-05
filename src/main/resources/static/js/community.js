@@ -10,7 +10,39 @@ function post() {
     var content = $("#comment_content").val();
     comment2target(questionId, 1, content);
 }
+function order() {
+    var pId = $("#question_creator").val();
+    var orderId = $("#session_user_id").val();
+    var oNum = $("#order_number").val();
+    var qDesc = $("#qDesc").val();
+    var quesId = $("#quesId").val();
+    addOrder(pId,orderId,oNum,qDesc,quesId);
+}
+function addOrder(pId, orderId, oNum,qDesc,quesId) {
+    if (!oNum) {
+        alert("请输入数量");
+        return;
+    }
 
+    $.ajax({
+        type: "POST",
+        url: "/addOrder",
+        contentType: 'application/json',
+        data: JSON.stringify({
+            "providerId": pId,
+            "buyerId": orderId,
+            "number": oNum,
+            "description": qDesc,
+            "questionId": quesId
+        }),
+        success: function (response) {
+            if (response.code == 200) {
+                alert("加入订单成功，请到我的订单查看");
+            }
+        },
+        dataType: "json"
+    });
+}
 function comment2target(targetId, type, content) {
     if (!content) {
         alert("不能回复空内容~~~");
