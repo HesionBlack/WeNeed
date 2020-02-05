@@ -21,4 +21,12 @@ public class LoginUserService {
     public LoginUser login(LoginUser loginUser) {
         return loginUserMapper.login(loginUser);
     }
+
+    public int isRegister(String username) {
+        return loginUserMapper.isRegister(username);
+    }
+
+    public void goRegister(LoginUser login) {
+        loginUserMapper.doRegister(login);
+    }
 }

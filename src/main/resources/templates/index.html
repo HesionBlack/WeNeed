@@ -3,6 +3,9 @@
 <head>
     <title></title>
     <head th:insert="~{import :: head}"></head>
+    <style>
+        li{ list-style-type: none; }
+    </style>
 </head>
 <script type="application/javascript">
     window.onload = function () {
@@ -12,10 +15,33 @@
             window.localStorage.removeItem("closable");
         }
     }
+    function AutoScroll(obj) {
+        $(obj).find("ul:first").animate({
+                marginTop: "-22px"
+            },
+            500,
+            function() {
+                $(this).css({
+                    marginTop: "0px"
+                }).find("li:first").appendTo(this);
+            });
+    }
+    $(document).ready(function() {
+        setInterval('AutoScroll("#demo")', 7000)
+    });
 </script>
 <body>
 <div th:insert="~{navigation :: nav}"></div>
+
 <div class="container-fluid main">
+    <div id="broadcast" class="bar" name="giftactive">
+        <h3 ><span class="glyphicon glyphicon-list" aria-hidden="true"><strong>最新需求：</strong></h3>
+        <div id="demo" style="overflow:hidden;height:22px;line-height:22px;">
+            <ul class="mingdan" id="holder">
+                <li th:each="latestQue : ${latestQues}"><a th:href="@{'/question/'+ ${latestQue.id}}" th:text="${latestQue.title}" target="_blank"></a></li>
+            </ul>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <h3><span class="glyphicon glyphicon-list" aria-hidden="true"></span>需求</h3>
@@ -100,5 +126,6 @@
     </div>
 </div>
 <div th:insert="~{footer :: foot}"></div>
+
 </body>
 </html>

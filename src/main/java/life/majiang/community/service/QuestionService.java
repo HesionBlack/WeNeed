@@ -232,4 +232,8 @@ public class QuestionService {
         }).collect(Collectors.toList());
         return questionDTOS;
     }
+
+    public List<Question> latestQue() {
+        return questionMapper.latestQue();
+    }
 }

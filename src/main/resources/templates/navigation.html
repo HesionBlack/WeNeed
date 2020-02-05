@@ -116,8 +116,93 @@
                                                             "username": username,
                                                             "password": password
                                                         },
+                                                        fail: function(r){
+                                                            console.log("登录失败");
+                                                        },
                                                         success: function(r) {
                                                            console.log("登录成功");
+                                                            location.reload();
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li th:if="${session.user == null}">
+                        <!--                        <a th:href="@{https://github.com/login/oauth/authorize(client_id='2859958f9f059979ed3a',redirect_uri=${#httpServletRequest.getServletContext().getAttribute('redirectUri')},scope='user',state=1)}">登录</a>-->
+                        <button class="btn btn-lg" data-toggle="modal" data-target="#myRegLabel">
+                            注册
+                        </button>
+                        <!-- 模态框（Modal） -->
+                        <div class="modal fade" id="myRegLabel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+                             data-backdrop="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <!--登录框头部-->
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                            ×
+                                        </button>
+                                        <h4 class="modal-title" id="myRegModalLabel">
+                                            欢迎注册！
+                                        </h4>
+                                    </div>
+                                    <!--登录框中间部分(from表单)-->
+                                    <div class="modal-body">
+                                        <form class="form-horizontal" role="form">
+                                            <!--用户框-->
+                                            <div class="form-group">
+                                                <label for="username" class="col-sm-2 control-label">用户名</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="regUser" placeholder="username"
+                                                           required="required">
+                                                </div>
+                                            </div>
+                                            <!--密码框-->
+                                            <div class="form-group">
+                                                <label for="regPwd" class="col-sm-2 control-label">密码</label>
+                                                <div class="col-sm-10">
+                                                    <input type="password" class="form-control" id="regPwd" placeholder="password"
+                                                           required="required">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="confirmpwd" class="col-sm-2 control-label">密码</label>
+                                                <div class="col-sm-10">
+                                                    <input type="password" class="form-control" id="confirmpwd" placeholder="confirmpwd"
+                                                           required="required">
+                                                </div>
+                                            </div>
+                                            <!--登录按钮-->
+                                            <div class="form-group">
+                                                <div class="col-sm-offset-2 col-sm-10">
+                                                    <button  type="button" class="btn btn-default" onclick="reg()">注册</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <script type="text/javascript">
+                                            function reg() {
+                                                console.log("点了一下注册");
+                                                var regUser = $("#regUser").val();
+                                                var regPwd = $("#regPwd").val();
+                                                var confirmpwd = $("#confirmpwd").val();
+                                                if(regPwd === confirmpwd &&regPwd!==null && confirmpwd !== null && regUser!==null){
+                                                    $.ajax({
+                                                        type: "post",
+                                                        url: "/reg",
+                                                        data: {
+                                                            "username": regUser,
+                                                            "password": confirmpwd
+                                                        },
+                                                        fail: function(r){
+                                                            console.log("注册失败");
+                                                        },
+                                                        success: function(r) {
+                                                           console.log("注册成功");
                                                             location.reload();
                                                         }
                                                     });

@@ -5,6 +5,8 @@ import life.majiang.community.model.User;
 import life.majiang.community.provider.GithubProvider;
 import life.majiang.community.service.LoginUserService;
 import life.majiang.community.service.UserService;
+import life.majiang.community.utils.AjaxResponse;
+import life.majiang.community.utils.MyMD5Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,10 +14,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -53,7 +57,7 @@ public class AuthorizeController {
 ////        accessTokenDTO.setState(state);
 ////        String accessToken = githubProvider.getAccessToken(accessTokenDTO);
 ////        GithubUser githubUser = githubProvider.getUser(accessToken);
-
+        login.setPassword(MyMD5Util.encrypt(login.getPassword()));
         LoginUser loginUser = loginUserService.login(login);
         if (loginUser != null && loginUser.getId() != null) {
             User user = new User();
@@ -82,5 +86,20 @@ public class AuthorizeController {
         cookie.setMaxAge(0);
         response.addCookie(cookie);
         return "redirect:/";
+    }
+    @PostMapping("/reg")
+    @ResponseBody
+    public AjaxResponse reg(LoginUser login){
+        login.setPassword(MyMD5Util.encrypt(login.getPassword()));
+        login.setCreateTime(new Date());
+        int register = loginUserService.isRegister(login.getUsername());
+        System.out.println(register);
+        if (register == 0 ){
+            login.setId(UUID.randomUUID().toString());
+            loginUserService.goRegister(login);
+            return AjaxResponse.success();
+        }else {
+            return AjaxResponse.fail("用户已经注册");
+        }
     }
 }

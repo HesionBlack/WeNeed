@@ -2,6 +2,7 @@ package life.majiang.community.controller;
 
 import life.majiang.community.cache.HotTagCache;
 import life.majiang.community.dto.PaginationDTO;
+import life.majiang.community.model.Question;
 import life.majiang.community.service.NavService;
 import life.majiang.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ public class IndexController {
     @Autowired
     private HotTagCache hotTagCache;
 
+
     @GetMapping("/")
     public String index(Model model,
                         @RequestParam(name = "page", defaultValue = "1") Integer page,
@@ -32,12 +34,14 @@ public class IndexController {
                         @RequestParam(name = "tag", required = false) String tag,
                         @RequestParam(name = "sort", required = false) String sort) {
         PaginationDTO pagination = questionService.list(search, tag, sort, page, size);
+        List<Question> latestQues = questionService.latestQue();
         List<String> tags = hotTagCache.getHots();
         model.addAttribute("pagination", pagination);
         model.addAttribute("search", search);
         model.addAttribute("tag", tag);
         model.addAttribute("tags", tags);
         model.addAttribute("sort", sort);
+        model.addAttribute("latestQues", latestQues);
         return "index";
     }
 }

@@ -478,4 +478,8 @@
       order by ${orderByClause}
     </if>
   </select>
+
+  <select id="latestQue" resultType="life.majiang.community.model.Question">
+    select * from question ORDER BY gmt_Create DESC
+  </select>
 </mapper>
