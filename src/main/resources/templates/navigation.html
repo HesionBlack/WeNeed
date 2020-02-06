@@ -119,10 +119,15 @@
                                                         },
                                                         fail: function(r){
                                                             console.log("登录失败");
+                                                            alert("登录失败,请重新登录");
                                                         },
                                                         success: function(r) {
-                                                           console.log("登录成功");
-                                                            location.reload();
+                                                            if(r.code === 200)
+                                                                console.log("登录成功");
+                                                            alert("登录成功");
+                                                            setTimeout(function (){
+                                                                window.location.reload();
+                                                            }, 1000);
                                                         }
                                                     });
                                                 }
@@ -191,6 +196,10 @@
                                                 var regUser = $("#regUser").val();
                                                 var regPwd = $("#regPwd").val();
                                                 var confirmpwd = $("#confirmpwd").val();
+                                                if(regPwd !== confirmpwd){
+                                                    alert("两次密码不一样，请重新输入");
+                                                    return
+                                                }
                                                 if(regPwd === confirmpwd &&regPwd!==null && confirmpwd !== null && regUser!==null){
                                                     $.ajax({
                                                         type: "post",
@@ -201,10 +210,19 @@
                                                         },
                                                         fail: function(r){
                                                             console.log("注册失败");
+                                                            alert("注册失败，请重新注册")
                                                         },
                                                         success: function(r) {
-                                                           console.log("注册成功");
-                                                            location.reload();
+                                                            if(r.code === 200){
+                                                                console.log("注册成功");
+                                                                alert("注册成功,请点击登录");
+                                                                setTimeout(function (){
+                                                                    window.location.reload();
+                                                                }, 1000);
+                                                            }else{
+                                                                console.log("注册失败");
+                                                                alert("用户名已存在，请更换")
+                                                            }
                                                         }
                                                     });
                                                 }
