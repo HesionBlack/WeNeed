@@ -153,11 +153,11 @@
                     <input type="hidden" id="quesId" th:value="${question.id}">
 
                     <textarea class="form-control comment" rows="6" id="comment_content"></textarea>
-                    <span th:if="${session.user != null}">
+                    <span th:if="${session.user != null && session.user.getId()!=question.creator}">
                         <label for="order_number">购买数量:</label>
                         <input type="number" id="order_number">
                     </span>
-                    <button th:if="${session.user != null}" type="button" class="btn btn-default btn-comment" onclick="order()">加入我的订单</button>
+                    <button th:if="${session.user != null && session.user.getId()!=question.creator}" type="button" class="btn btn-default btn-comment" onclick="order()">加入我的订单</button>
                     &nbsp;
                     &nbsp;
                     <button type="button" class="btn btn-success btn-comment" onclick="post()">回复</button>
