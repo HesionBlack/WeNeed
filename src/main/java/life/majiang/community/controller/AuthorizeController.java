@@ -47,7 +47,8 @@ public class AuthorizeController {
     private LoginUserService loginUserService;
 
     @PostMapping("/callback")
-    public String callback(LoginUser login,
+    @ResponseBody
+    public AjaxResponse callback(LoginUser login,
                            HttpServletResponse response) {
 //        AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
 ////        accessTokenDTO.setClient_id(clientId);
@@ -58,6 +59,11 @@ public class AuthorizeController {
 ////        String accessToken = githubProvider.getAccessToken(accessTokenDTO);
 ////        GithubUser githubUser = githubProvider.getUser(accessToken);
         login.setPassword(MyMD5Util.encrypt(login.getPassword()));
+        Integer hasUser = loginUserService.hasUser(login);
+        if(hasUser == 0){
+            // 登录失败，重新登录
+            return AjaxResponse.fail("用户不存在,请注册");
+        }
         LoginUser loginUser = loginUserService.login(login);
         if (loginUser != null && loginUser.getId() != null) {
             User user = new User();
@@ -70,11 +76,10 @@ public class AuthorizeController {
             Cookie cookie = new Cookie("token", token);
             cookie.setMaxAge(60 * 60 * 24 * 30 * 6);
             response.addCookie(cookie);
-            return "redirect:/";
+            return AjaxResponse.success("登陆成功");
         } else {
-            log.error("账号或者密码错误", loginUser);
             // 登录失败，重新登录
-            return "redirect:/";
+            return AjaxResponse.fail("账号或者密码错误");
         }
     }
 

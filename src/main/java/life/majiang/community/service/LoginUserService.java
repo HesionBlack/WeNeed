@@ -29,4 +29,8 @@ public class LoginUserService {
     public void goRegister(LoginUser login) {
         loginUserMapper.doRegister(login);
     }
+
+    public Integer hasUser(LoginUser login) {
+        return loginUserMapper.hasUser(login);
+    }
 }

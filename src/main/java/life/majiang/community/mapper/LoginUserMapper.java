@@ -22,4 +22,6 @@ public interface LoginUserMapper {
     int isRegister(String username);
     @Insert("INSERT INTO loginUser(id,username,password,createTime) VALUES(#{user.id},#{user.username},#{user.password},#{user.createTime})")
     void doRegister(@Param("user") LoginUser login);
+    @Select("SELECT count(*) from loginuser WHERE username=#{username}")
+    Integer hasUser(LoginUser login);
 }

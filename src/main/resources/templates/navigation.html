@@ -122,12 +122,17 @@
                                                             alert("登录失败,请重新登录");
                                                         },
                                                         success: function(r) {
-                                                            if(r.code === 200)
+                                                            if(r.code === 200){
                                                                 console.log("登录成功");
-                                                            alert("登录成功");
-                                                            setTimeout(function (){
-                                                                window.location.reload();
-                                                            }, 1000);
+                                                                alert("登录成功");
+                                                                setTimeout(function (){
+                                                                    window.location.reload();
+                                                                }, 1000);
+                                                            }else {
+                                                                alert(r.data);
+                                                            }
+
+
                                                         }
                                                     });
                                                 }
