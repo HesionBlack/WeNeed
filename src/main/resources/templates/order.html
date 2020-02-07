@@ -26,12 +26,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="order:${orders}">
+                <tr th:each="order:${orders}" th:if="${orders != null}">
                     <td th:text="${order.id}"></td>
                     <td th:text="${order.description}"></td>
                     <td th:text="${order.number}"></td>
                     <td th:text="${order.pName}"></td>
                     <td th:text="${#dates.format(order.createTime, 'yyyy-MM-dd HH:mm')}"></td>
+                </tr>
+                <tr th:if="${orders.size()==0}">
+                    <td rowspan=$rowspan style='vertical-align: middle;text-align: center; !important;'>暂无订单</td>
                 </tr>
                 </tbody>
             </table>
