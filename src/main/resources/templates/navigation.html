@@ -15,8 +15,11 @@
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                         data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                     <span class="sr-only"></span>
+                    <span th:if="${session.user == null}" th:text="展开"></span>
+<!--                    <span th:if="${session.user != null}" th:text="${#strings.toUpperCase(#strings.substring(session.user.getName(),0,1))}"></span>-->
+                    <span th:if="${session.user != null}" th:text="${#strings.toUpperCase(session.user.getName())}"></span>
                 </button>
-                <a class="navbar-brand" href="/">需求发布平台</a>
+                <a class="navbar-brand" href="/">易C需求发布平台</a>
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
