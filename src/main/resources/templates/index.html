@@ -35,7 +35,7 @@
 
 <div class="container-fluid main">
     <div id="broadcast" class="bar" name="giftactive">
-        <h3 ><span class="glyphicon glyphicon-list" aria-hidden="true"><strong>最新需求：</strong></h3>
+        <h3 ><strong>最新需求：</strong></h3>
         <div id="demo" style="overflow:hidden;height:22px;line-height:22px;">
             <ul class="mingdan" id="holder">
                 <li th:each="latestQue : ${latestQues}"><a th:href="@{'/question/'+ ${latestQue.id}}" th:text="${latestQue.title}" target="_blank"></a></li>
@@ -44,7 +44,7 @@
     </div>
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-            <h3><span class="glyphicon glyphicon-list" aria-hidden="true"></span>需求</h3>
+            <h3></span>需求</h3>
             <ul class="nav nav-tabs">
                 <li role="presentation" th:class="${sort == 'new' || sort == '' ? 'active':''}">
                     <a th:href="@{/(sort='new')}">最新</a>
